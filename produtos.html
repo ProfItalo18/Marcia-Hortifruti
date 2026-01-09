@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Produtos • Mônica Hortifruti</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bgfx"></div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="logo"></div>
+        <div class="name">
+          <strong>Mônica Hortifruti</strong>
+          <span>Vitrine • frescor • promoções</span>
+        </div>
+      </a>
+
+      <div class="search">
+        <span>🔎</span>
+        <input id="searchInput" placeholder="Buscar..." />
+        <small id="countInfo">—</small>
+      </div>
+
+      <nav class="navlinks">
+        <a class="pill" href="index.html">Início</a>
+        <a class="pill" href="carrinho.html">Carrinho <span id="cartBadge" class="badge">0</span></a>
+        <a class="pill" href="login.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="sectionHead">
+      <div>
+        <h2>Produtos</h2>
+        <p>Filtre por categoria e monte seu pedido rapidinho</p>
+      </div>
+      <div class="row">
+        <span class="tag">Filtro</span>
+        <select id="categorySelect"></select>
+      </div>
+    </div>
+
+    <div id="productGrid" class="productGrid"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div style="font-size:12px;color:var(--muted)">Dica: admin consegue ajustar estoque em tempo real.</div>
+        <a class="pill" href="checkout.html">Ir para checkout →</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initStorePage } from "./js/store.js";
+    initStorePage();
+  </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Carrinho • Mônica Hortifruti</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bgfx"></div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="logo"></div>
+        <div class="name">
+          <strong>Mônica Hortifruti</strong>
+          <span>Carrinho e resumo</span>
+        </div>
+      </a>
+
+      <nav class="navlinks">
+        <a class="pill" href="produtos.html">Voltar aos produtos</a>
+        <a class="pill" href="checkout.html">Checkout</a>
+        <a class="pill" href="login.html">Admin</a>
+        <a class="pill" href="carrinho.html">Itens <span id="cartBadge" class="badge">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="sectionHead">
+      <div>
+        <h2>Seu carrinho</h2>
+        <p>Edite quantidades e finalize quando estiver pronto</p>
+      </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1.2fr .8fr;align-items:start">
+      <div class="card">
+        <div class="cardPad">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th>Qtd</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardPad">
+          <div class="kpi"><strong>Total</strong><span id="sum">R$ 0,00</span></div>
+          <div style="height:10px"></div>
+          <a class="btn btnPrimary" href="checkout.html" style="display:block;text-align:center">Finalizar pedido</a>
+          <div style="height:10px"></div>
+          <a class="btn btnGhost" href="produtos.html" style="display:block;text-align:center">Adicionar mais itens</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { cartGet, cartSetQty, cartRemove, cartGetTotal, cartGetCount } from "./js/cart.js";
+    import { formatBRL, setCartBadge } from "./js/ui.js";
+
+    function render(){
+      const items = cartGet();
+      setCartBadge(cartGetCount());
+
+      const tbody = document.getElementById("tbody");
+      if(items.length === 0){
+        tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">Carrinho vazio. <a href="produtos.html">Ir às compras</a></td></tr>`;
+      }else{
+        tbody.innerHTML = items.map(it => `
+          <tr>
+            <td><strong>${it.name}</strong><div style="color:var(--muted);font-size:12px">${it.category} • ${it.unit}</div></td>
+            <td>${formatBRL(it.price)}</td>
+            <td>
+              <div class="qty">
+                <button data-dec="${it.id}">−</button>
+                <input data-qty="${it.id}" value="${it.qty}" />
+                <button data-inc="${it.id}">+</button>
+              </div>
+            </td>
+            <td style="font-weight:900">${formatBRL(it.qty * it.price)}</td>
+            <td><button class="btn" data-del="${it.id}" style="padding:8px 10px;border-radius:12px;background:linear-gradient(135deg,var(--tomato),var(--berry));color:#fff;font-weight:900">X</button></td>
+          </tr>
+        `).join("");
+      }
+
+      document.getElementById("sum").textContent = formatBRL(cartGetTotal());
+    }
+
+    document.addEventListener("click", (e)=>{
+      const inc = e.target.closest("[data-inc]");
+      const dec = e.target.closest("[data-dec]");
+      const del = e.target.closest("[data-del]");
+      if(inc){
+        const id = inc.getAttribute("data-inc");
+        const it = cartGet().find(x=>x.id===id);
+        cartSetQty(id, (it?.qty||1)+1);
+        render();
+      }
+      if(dec){
+        const id = dec.getAttribute("data-dec");
+        const it = cartGet().find(x=>x.id===id);
+        cartSetQty(id, Math.max(1,(it?.qty||1)-1));
+        render();
+      }
+      if(del){
+        cartRemove(del.getAttribute("data-del"));
+        render();
+      }
+    });
+
+    document.addEventListener("change", (e)=>{
+      const inp = e.target.closest("[data-qty]");
+      if(!inp) return;
+      const id = inp.getAttribute("data-qty");
+      cartSetQty(id, Number(inp.value || 1));
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

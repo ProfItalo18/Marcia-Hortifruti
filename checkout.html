@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout • Mônica Hortifruti</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bgfx"></div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="logo"></div>
+        <div class="name">
+          <strong>Mônica Hortifruti</strong>
+          <span>Checkout seguro</span>
+        </div>
+      </a>
+
+      <nav class="navlinks">
+        <a class="pill" href="carrinho.html">Voltar ao carrinho</a>
+        <a class="pill" href="produtos.html">Produtos</a>
+        <a class="pill" href="carrinho.html">Itens <span id="cartBadge" class="badge">0</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="sectionHead">
+      <div>
+        <h2>Finalizar pedido</h2>
+        <p>Confirme seus dados e escolha entrega/retirada</p>
+      </div>
+      <div class="tag">Total: <strong id="total" style="margin-left:6px">R$ 0,00</strong></div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1fr 1fr; align-items:start;">
+      <div class="card">
+        <div class="cardPad">
+          <h3 style="margin:0 0 10px">Seus dados</h3>
+          <form id="checkoutForm" class="form">
+            <div class="field">
+              <label>Nome</label>
+              <input id="cName" placeholder="Seu nome" required />
+            </div>
+            <div class="field">
+              <label>Telefone (WhatsApp)</label>
+              <input id="cPhone" placeholder="(xx) xxxxx-xxxx" required />
+            </div>
+
+            <div class="grid" style="grid-template-columns:1fr 1fr">
+              <div class="field">
+                <label>Entrega / Retirada</label>
+                <select id="cDelivery">
+                  <option>Entrega</option>
+                  <option>Retirada</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Pagamento</label>
+                <select id="cMethod">
+                  <option>Pix</option>
+                  <option>Cartão</option>
+                  <option>Dinheiro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Endereço (se for entrega)</label>
+              <input id="cAddress" placeholder="Rua, número, bairro..." />
+            </div>
+
+            <div class="field">
+              <label>Observações</label>
+              <textarea id="cNote" placeholder="Ex.: entregar na portaria, sem cebola, etc."></textarea>
+            </div>
+
+            <button class="btn btnPrimary" type="submit">Confirmar pedido</button>
+            <a class="btn btnGhost" href="produtos.html" style="text-align:center">Continuar comprando</a>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardPad">
+          <h3 style="margin:0 0 10px">Resumo</h3>
+          <div id="resume" class="grid"></div>
+          <div style="height:10px"></div>
+          <div class="kpi">
+            <strong>Total</strong>
+            <span id="total2">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initCheckoutPage } from "./js/checkout.js";
+    import { cartGetTotal } from "./js/cart.js";
+    import { formatBRL } from "./js/ui.js";
+    document.getElementById("total2").textContent = formatBRL(cartGetTotal());
+    initCheckoutPage();
+  </script>
+</body>
+</html>

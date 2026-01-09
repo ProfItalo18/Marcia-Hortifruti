@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login Admin • Mônica Hortifruti</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bgfx"></div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="logo"></div>
+        <div class="name">
+          <strong>Mônica Hortifruti</strong>
+          <span>Acesso ao painel</span>
+        </div>
+      </a>
+      <nav class="navlinks">
+        <a class="pill" href="index.html">Início</a>
+        <a class="pill" href="produtos.html">Produtos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="grid" style="grid-template-columns: 1fr 1fr; align-items:start;">
+      <div class="card">
+        <div class="cardPad">
+          <h2 style="margin:0 0 8px">Login Admin</h2>
+          <p style="margin:0 0 12px;color:var(--muted);line-height:1.6;font-size:13px">
+            No modo local, use o PIN. No modo Firebase, use e-mail e senha.
+          </p>
+
+          <div class="card" style="background:rgba(255,255,255,.05)">
+            <div class="cardPad">
+              <div class="tag">Modo local (PIN)</div>
+              <form id="localForm" class="form" style="margin-top:10px">
+                <div class="field">
+                  <label>PIN</label>
+                  <input id="pin" placeholder="Ex.: 1234" />
+                </div>
+                <button class="btn btnPrimary" type="submit">Entrar</button>
+              </form>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="card" style="background:rgba(255,255,255,.05)">
+            <div class="cardPad">
+              <div class="tag">Modo Firebase (e-mail/senha)</div>
+              <form id="fbForm" class="form" style="margin-top:10px">
+                <div class="field">
+                  <label>E-mail</label>
+                  <input id="email" type="email" placeholder="admin@..." />
+                </div>
+                <div class="field">
+                  <label>Senha</label>
+                  <input id="pass" type="password" placeholder="••••••••" />
+                </div>
+                <button class="btn btnPrimary" type="submit">Entrar com Firebase</button>
+              </form>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+          <a class="btn btnGhost" href="admin.html" style="display:block;text-align:center">Ir ao painel</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardPad">
+          <h3 style="margin:0 0 10px">Dica de uso</h3>
+          <div class="kpi"><strong>Local</strong><span>Rápido pra testar (sem nuvem)</span></div>
+          <div class="kpi"><strong>Firebase</strong><span>Dados na nuvem (Firestore)</span></div>
+          <div class="kpi"><strong>Admin</strong><span>Produtos • estoque • pedidos</span></div>
+
+          <p style="margin:12px 0 0;color:var(--muted);font-size:13px;line-height:1.6">
+            Para ativar Firebase: abra <b>js/config.js</b>, coloque <b>useFirebase: true</b> e cole a config do seu app.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { SETTINGS } from "./js/config.js";
+    import { toast } from "./js/ui.js";
+    import { loginLocal, loginFirebase } from "./js/auth.js";
+
+    document.getElementById("localForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const pin = document.getElementById("pin").value.trim();
+      const ok = await loginLocal(pin);
+      if(ok){
+        toast("Login OK ✅");
+        setTimeout(()=> location.href="admin.html", 600);
+      }else{
+        toast("PIN inválido.");
+      }
+    });
+
+    document.getElementById("fbForm").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      if(!SETTINGS.useFirebase){
+        toast("Ative o Firebase em js/config.js para usar e-mail/senha.");
+        return;
+      }
+      const email = document.getElementById("email").value.trim();
+      const pass = document.getElementById("pass").value;
+      try{
+        const ok = await loginFirebase(email, pass);
+        if(ok){
+          toast("Login Firebase OK ✅");
+          setTimeout(()=> location.href="admin.html", 700);
+        }
+      }catch(err){
+        toast("Falha no login Firebase.");
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

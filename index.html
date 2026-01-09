@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mônica Hortifruti • Frescor que Brilha</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bgfx"></div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="name">
+          <strong>Mônica Hortifruti</strong>
+          <span>Frescor • preço justo • entrega rápida</span>
+        </div>
+      </a>
+
+      <div class="search" title="Busque por produto, categoria...">
+        <span aria-hidden="true">🔎</span>
+        <input id="searchInput" placeholder="Buscar frutas, verduras, cestas..." />
+        <small>Enter</small>
+      </div>
+
+      <nav class="navlinks">
+        <a class="pill" href="produtos.html">Produtos</a>
+        <a class="pill" href="carrinho.html">Carrinho <span id="cartBadge" class="badge">0</span></a>
+        <a class="pill" href="login.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="heroCard">
+        <div class="heroInner">
+          <div>
+            <h1>Seu hortifruti online com identidade própria, moderna e chamativa.</h1>
+            <p>
+              Compre em minutos: escolha produtos, monte sua cesta e finalize.
+              No painel admin, você controla <b>estoque</b>, vê <b>vendas</b> e acompanha <b>pedidos</b>.
+            </p>
+            <div class="heroActions">
+              <a class="btn btnPrimary" href="produtos.html">Comprar agora</a>
+              <a class="btn btnGhost" href="admin.html">Ver painel de gestão</a>
+            </div>
+          </div>
+          <div class="heroStats" aria-label="Destaques">
+            <div class="kpi"><strong>Entrega</strong><span>rápida na região</span></div>
+            <div class="kpi"><strong>Pix</strong><span>e pagamento na entrega</span></div>
+            <div class="kpi"><strong>Cestas</strong><span>com economia real</span></div>
+            <div class="kpi"><strong>Estoque</strong><span>controle no admin</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div>
+          <h2>Categorias</h2>
+          <p>Clique e vá direto para a vitrine filtrada</p>
+        </div>
+        <a class="pill" href="produtos.html">Ver tudo →</a>
+      </div>
+      <div id="cats" class="cards"></div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div>
+          <h2>Destaques da semana</h2>
+          <p>Seleção rápida pra você comprar sem perder tempo</p>
+        </div>
+      </div>
+      <div id="highlights" class="productGrid"></div>
+    </section>
+
+    <section class="section">
+      <div class="sectionHead">
+        <div>
+          <h2>Como funciona</h2>
+          <p>Fluxo simples, estilo marketplace moderno (com visual próprio)</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card" style="grid-column:span 4">
+          <div class="cardPad">
+            <div class="tag">1</div>
+            <h3 style="margin:10px 0 6px">Escolha os produtos</h3>
+            <p style="margin:0;color:var(--muted);line-height:1.6;font-size:13px">
+              Pesquise, filtre por categoria e adicione ao carrinho com 1 clique.
+            </p>
+          </div>
+        </div>
+        <div class="card" style="grid-column:span 4">
+          <div class="cardPad">
+            <div class="tag">2</div>
+            <h3 style="margin:10px 0 6px">Finalize o pedido</h3>
+            <p style="margin:0;color:var(--muted);line-height:1.6;font-size:13px">
+              Informe seus dados, escolha entrega/retirada e forma de pagamento.
+            </p>
+          </div>
+        </div>
+        <div class="card" style="grid-column:span 4">
+          <div class="cardPad">
+            <div class="tag">3</div>
+            <h3 style="margin:10px 0 6px">Gestão no painel</h3>
+            <p style="margin:0;color:var(--muted);line-height:1.6;font-size:13px">
+              Admin cria produtos, controla estoque e acompanha vendas/pedidos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div>
+          <strong>Mônica Hortifruti</strong>
+          <div style="font-size:12px;margin-top:6px">© <span id="y"></span> • Ecommerce front-end com gestão de estoque e vendas.</div>
+        </div>
+        <div style="font-size:12px">
+          <span class="tag">WhatsApp: (xx) xxxxx-xxxx</span>
+          <span class="tag">Entrega e retirada</span>
+          <span class="tag">PIX • cartão • dinheiro</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initStorePage } from "./js/store.js";
+    document.getElementById("y").textContent = new Date().getFullYear();
+    // "Enter" no home leva para produtos com busca
+    document.getElementById("searchInput").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter"){
+        location.href = "produtos.html?q=" + encodeURIComponent(e.target.value.trim());
+      }
+    });
+    initStorePage();
+  </script>
+</body>
+</html>

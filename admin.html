@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Painel Admin • Mônica Hortifruti</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bgfx"></div>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <div class="logo"></div>
+        <div class="name">
+          <strong>Mônica Hortifruti</strong>
+          <span>Painel • estoque • vendas</span>
+        </div>
+      </a>
+      <nav class="navlinks">
+        <a class="pill" href="index.html">Site</a>
+        <a class="pill" href="produtos.html">Vitrine</a>
+        <button id="btnLogout" class="pill" style="cursor:pointer">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="sectionHead">
+      <div>
+        <h2>Admin</h2>
+        <p>Gestão completa (front-end) de produtos, estoque e pedidos</p>
+      </div>
+      <div class="row">
+        <button class="btn btnPrimary" data-tab="produtos">Produtos</button>
+        <button class="btn btnGhost" data-tab="pedidos">Pedidos</button>
+        <button class="btn btnGhost" data-tab="relatorios">Relatórios</button>
+      </div>
+    </div>
+
+    <!-- PRODUTOS -->
+    <section class="grid" data-panel="produtos" style="grid-template-columns: 1fr 1fr; align-items:start;">
+      <div class="card">
+        <div class="cardPad">
+          <div class="row">
+            <h3 style="margin:0">Cadastro de produto</h3>
+            <button id="btnNew" class="btn btnGhost" style="padding:10px 12px;border-radius:14px">Novo</button>
+          </div>
+
+          <form id="productForm" class="form" style="margin-top:10px">
+            <input id="pId" type="hidden" />
+
+            <div class="field">
+              <label>Nome</label>
+              <input id="pName" placeholder="Ex.: Morango, Alface..." />
+            </div>
+
+            <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px">
+              <div class="field">
+                <label>Categoria</label>
+                <select id="pCategory">
+                  <option>Frutas</option>
+                  <option>Verduras</option>
+                  <option>Legumes</option>
+                  <option>Cestas</option>
+                  <option>Temperos</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Unidade</label>
+                <input id="pUnit" placeholder="kg, un, maço..." value="kg" />
+              </div>
+            </div>
+
+            <div class="grid" style="grid-template-columns:1fr 1fr; gap:10px">
+              <div class="field">
+                <label>Preço</label>
+                <input id="pPrice" type="number" step="0.01" placeholder="0.00" />
+              </div>
+              <div class="field">
+                <label>Estoque</label>
+                <input id="pStock" type="number" step="1" placeholder="0" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Descrição</label>
+              <textarea id="pDesc" placeholder="Breve descrição do produto..."></textarea>
+            </div>
+
+            <label class="pill" style="justify-content:flex-start; gap:10px;">
+              <input id="pFeatured" type="checkbox" />
+              <span>Marcar como destaque</span>
+            </label>
+
+            <button class="btn btnPrimary" type="submit">Salvar produto</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardPad">
+          <h3 style="margin:0 0 10px">Lista de produtos</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Destaque</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="productsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PEDIDOS -->
+    <section data-panel="pedidos" style="display:none">
+      <div class="card">
+        <div class="cardPad">
+          <h3 style="margin:0 0 10px">Pedidos</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Pedido</th>
+                <th>Cliente</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELATÓRIOS -->
+    <section data-panel="relatorios" style="display:none">
+      <div class="cards">
+        <div class="card" style="grid-column:span 4">
+          <div class="cardPad">
+            <div class="tag">Pedidos</div>
+            <h3 style="margin:10px 0 0"><span id="ordersCount">0</span></h3>
+            <p style="margin:6px 0 0;color:var(--muted);font-size:13px">Total de pedidos registrados</p>
+          </div>
+        </div>
+        <div class="card" style="grid-column:span 8">
+          <div class="cardPad">
+            <div class="tag">Faturamento (últimos dias)</div>
+            <h3 style="margin:10px 0 0" id="ordersTotal">R$ 0,00</h3>
+            <canvas id="chart" style="width:100%;height:240px;margin-top:10px;border-radius:16px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04)"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initAdminPage } from "./js/admin.js";
+    initAdminPage();
+  </script>
+</body>
+</html>
